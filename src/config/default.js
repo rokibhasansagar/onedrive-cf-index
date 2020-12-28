@@ -4,15 +4,15 @@ const config = {
    * You can use this tool http://heymind.github.io/tools/microsoft-graph-api-auth
    * to get following params: client_id, client_secret, refresh_token & redirect_uri.
    */
-  refresh_token: REFRESH_TOKEN,
-  client_id: '6600e358-9328-4050-af82-0af9cdde796b',
+  // refresh_token: REFRESH_TOKEN,
+  client_id: '48368f43-c914-4ebd-8fa1-0c146b5d9657',
   client_secret: CLIENT_SECRET,
   redirect_uri: 'https://heymind.github.io/tools/microsoft-graph-api-auth',
 
   /**
    * The base path for indexing, all files and subfolders are public by this tool. For example: `/Public`.
    */
-  base: '/Public',
+  base: '/',
 
   /**
    * Feature: add OneDriveCN (21Vianet) support
@@ -47,9 +47,9 @@ const config = {
    *
    */
   cache: {
-    enable: false,
+    enable: true,
     entireFileCacheLimit: 10000000, // 10MB
-    chunkedCacheLimit: 100000000, // 100MB
+    chunkedCacheLimit: 50000000, // 50MB
     paths: ['/Images']
   },
 
@@ -67,8 +67,8 @@ const config = {
    * POST https://<base_url>/<directory_path>/?upload=<filename>&key=<secret_key>
    */
   upload: {
-    enable: false,
-    key: 'your_secret_key_here'
+    enable: true,
+    key: 'super_secret'
   },
 
   /**
