@@ -1,10 +1,10 @@
-name = "drive"
+name = "phantomdrive"
 type = "webpack"
 workers_dev = true
-account_id = "b87997a496f985b46b927b3f24c61de1"
-zone_id = "b04152d2c33ff4653cec1a579be6d42a"
+account_id = "1fba8691d45f3422a3e3a44d1b1e4dab"
+zone_id = "f5d18948a0200e0b1e362bd9414e8e48"
 kv_namespaces = [
-    { binding = "BUCKET", preview_id = "55b0fc4e288a465fb225421f2af5d445", id = "09b0cf433f394b309d35d1ff3bd0bf39" }
+    { binding = "BUCKET", preview_id = "cb1c2e99cf3244d698c3fd20c600e77b", id = "35ec88c313d54ac7af434cdcc295d66b" }
 ]
 
 [env.staging]
