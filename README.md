@@ -10,7 +10,7 @@
 [![Deploy](https://github.com/spencerwooo/onedrive-cf-index/workflows/Deploy/badge.svg)](https://github.com/spencerwooo/onedrive-cf-index/actions?query=workflow%3ADeploy)
 [![README-CN](assets/chinese.svg)](./README-CN.md)
 
-<h5>This project is greatly inspired by: <a href="https://github.com/heymind/OneDrive-Index-Cloudflare-Worker">onedrive-index-cloudflare-worker</a>.</h5>
+<h5>This project uses CloudFlare Workers to host and share your personal OneDrive files. It is greatly inspired by: <a href="https://github.com/heymind/OneDrive-Index-Cloudflare-Worker">onedrive-index-cloudflare-worker</a>.</h5>
 
 ## Demo
 
@@ -26,6 +26,7 @@ Live demo at [Spencer's OneDrive Index](https://storage.spencerwoo.com/).
 - Tokens cached and automatically refreshed with Cloudflare Workers KV storage.
 - Route lazy loading with the help of [Turbolinks®](https://github.com/turbolinks/turbolinks).
 - Supports OneDrive 21Vianet.（由世纪互联运营的 OneDrive。）
+- Supports mounting SharePoint.
 
 ### 🗃️ Folder indexing
 
@@ -65,7 +66,7 @@ See the new features section at the original [onedrive-index-cloudflare-worker](
 
 ## Deployment
 
-_Very, very long, tedious, step by step guide warning! Online token generation tool taken from the generous: <https://heymind.github.io/tools/microsoft-graph-api-auth>. We will be using this in the following steps._
+_Very, very long, tedious, step by step guide warning!_
 
 ### Generating OneDrive API Tokens
 
@@ -74,7 +75,7 @@ _Very, very long, tedious, step by step guide warning! Online token generation t
    1. Login with your Microsoft account, select `New registration`.
    2. Input `Name` for your blade app, `my-onedrive-cf-index` for example.
    3. Set `Supported account types` to `Accounts in any organizational directory (Any Azure AD directory - Multitenant) and personal Microsoft accounts (e.g. Skype, Xbox)`. OneDrive 世纪互联用户设置为：`任何组织目录（任何 Azure AD 目录 - 多租户）中的帐户`.
-   4. Set `Redirect URI (optional)` to `Web` (the multiselect dropdown) and `https://heymind.github.io/tools/microsoft-graph-api-auth` (the URL).
+   4. Set `Redirect URI (optional)` to `Web` (the multiselect dropdown) and `http://localhost` (the URL).
    5. Click `Register`.
 
    ![](assets/register-app.png)
@@ -95,24 +96,15 @@ _Very, very long, tedious, step by step guide warning! Online token generation t
 
    ![](assets/permissions-used.png)
 
-5. Get your `refresh_token`:
+5. Get your `refresh_token`. On your local machine that has a working installation of Node.js and npm (See [Preparations](#preparations) for recommendations for installing Node.js and its toolchain), execute the following command:
 
-   1. Open <https://heymind.github.io/tools/microsoft-graph-api-auth>.
-   2. At `4. Authorize for code`, input our `client_id`, and hit `AUTHORIZE`.
+   ```sh
+   npx @beetcb/ms-graph-cli
+   ```
 
-      ![](assets/authorize-for-code.png)
+   <div align="center"><img src="https://raw.githubusercontent.com/beetcb/ms-graph-cli/master/media/demo.svg" alt="demo gif" width="560px" /></div>
 
-      Log into your Microsoft account and authorize our app, if you are returned with a code like what is shown below, then your authorization process is successful:
-
-      ![](assets/got-code.png)
-
-      Hit `OK`, and proceed on to the next stage.
-
-   3. At `5. Exchange Access Token`, the `Code` should already be inputted into the correct place for us, we only need to input our `client_secret`:
-
-      ![](assets/get-access-token.png)
-
-      Click `GET TOKEN`. If there is an error like `error: "invalid_request"`, then **please resolve to the solution suggested in the pinned issue [#13](https://github.com/spencerwooo/onedrive-cf-index/issues/13#issuecomment-671027672).** Otherwise, collect your `access_token` and if you need, use the final `Refresh Token` to collect your `refresh_token` as well.
+   Select the options that you need, and enter the tokens that we just acquired from above. The names are self-explanatory. `redirect_url` can be set to `http://localhost`. For more information please go check out the repo at: [beetcb/ms-graph-cli](https://github.com/beetcb/ms-graph-cli).
 
 6. Finally, create a dedicated folder for your public files inside OneDrive, for instance: `/Public`. Please don't share your root folder directly!
 
@@ -121,14 +113,14 @@ After all this hassle, you should have successfully acquired the following token
 - `refresh_token`
 - `client_id`
 - `client_secret`
-- `redirect_uri`: Defaults to `https://heymind.github.io/tools/microsoft-graph-api-auth`.
+- `redirect_uri`
 - `base`: Defaults to `/Public`.
 
 _Yes, I know it's a long and tedious procedure, but it's Microsoft, we can understand. 🤷🏼‍♂️_
 
 ### Preparations
 
-Fork or directly clone this repository. Install dependencies, you'll need Node.js, `npm` and `wrangler`.
+Fork then clone, or directly clone this repository. Install dependencies locally, you'll need Node.js, `npm` and `wrangler`.
 
 _We strongly recommend you install npm with a Node version manager like [n](https://github.com/tj/n) or [nvm](https://github.com/nvm-sh/nvm), which will allow wrangler to install configuration data in a global node_modules directory in your user's home directory, without requiring that you run as root._
 
@@ -166,16 +158,20 @@ wrangler kv:namespace create "BUCKET" --preview
 
 Modify `kv_namespaces` inside [`wrangler.toml`](wrangler.toml):
 
-- `kv_namespaces`: Your Cloudflare KV namespace, you should substitute the `id`
-  and `preview_id` values accordingly. _If you don't need preview functions, you
-  can remove the `preview_id` field._
+- `kv_namespaces`: Your Cloudflare KV namespace, you should substitute the `id` and `preview_id` values accordingly. _If you don't need preview functions, you can remove the `preview_id` field._
 
 Modify [`src/config/default.js`](src/config/default.js):
 
 - `client_id`: Your `client_id` from above.
 - `base`: Your `base` path from above.
-
-_For Chinese 21Vianet OneDrive users. OneDrive 世纪互联用户：将 `useCnEndpoints` 设置（修改）为 `true`。_
+- If you are mounting regular international OneDrive, you can safely ignore the following steps.
+- If you are mounting Chinese 21Vianet OneDrive (由世纪互联运营的 OneDrive):
+   - Set `accountType` under `type` to `1`.
+   - Keep `driveType` unmodified.
+- If you are mounting SharePoint:
+   - Keep `accountType` unmodified.
+   - Set `driveType` under `type` to `1`.
+   - Set `hostName` and `sitePath` accordingly.
 
 Add secrets to Cloudflare Workers environment variables with `wrangler`:
 
