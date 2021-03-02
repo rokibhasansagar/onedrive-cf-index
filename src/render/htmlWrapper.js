@@ -4,8 +4,7 @@ const COMMIT_HASH = 'master'
 
 const pagination = (pIdx, attrs) => {
   const getAttrs = (c, h, isNext) =>
-    `class="${c}" ${h ? `href="pagination?page=${h}"` : ''} ${
-      isNext === undefined ? '' : `onclick="handlePagination(${isNext})"`
+    `class="${c}" ${h ? `href="pagination?page=${h}"` : ''} ${isNext === undefined ? '' : `id=${c.includes('pre') ? 'pagination-pre' : 'pagination-next'}`
     }`
   if (pIdx) {
     switch (pIdx) {
@@ -46,6 +45,7 @@ export function renderHTML(body, pLink, pIdx) {
       <script src="https://cdn.jsdelivr.net/npm/turbolinks@5.2.0/dist/turbolinks.min.js"></script>
       <script src="https://cdn.jsdelivr.net/gh/pipwerks/PDFObject/pdfobject.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/flv.js@1.5.0/dist/flv.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/dplayer@1.26.0/dist/DPlayer.min.js"></script>
     </head>
     <body>
