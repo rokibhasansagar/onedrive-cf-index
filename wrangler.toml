@@ -1,10 +1,10 @@
-name = "drive"
+name = "onedrive5tb"
 type = "webpack"
 workers_dev = true
-account_id = "b87997a496f985b46b927b3f24c61de1"
-zone_id = "b04152d2c33ff4653cec1a579be6d42a"
+account_id = "1fba8691d45f3422a3e3a44d1b1e4dab"
+zone_id = "f5d18948a0200e0b1e362bd9414e8e48"
 kv_namespaces = [
-    { binding = "BUCKET", preview_id = "55b0fc4e288a465fb225421f2af5d445", id = "09b0cf433f394b309d35d1ff3bd0bf39" }
+    { binding = "BUCKET", id = "c1666dfc3c354e849f670996346b0295", preview_id = "8d80716383d042d1a41fa207d1635ec3" }
 ]
 
 [env.staging]

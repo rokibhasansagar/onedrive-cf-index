@@ -18,7 +18,7 @@ const config = {
   },
 
   refresh_token: REFRESH_TOKEN,
-  client_id: '6600e358-9328-4050-af82-0af9cdde796b',
+  client_id: CLIENT_ID,
   client_secret: CLIENT_SECRET,
 
   /**
@@ -29,7 +29,7 @@ const config = {
   /**
    * The base path for indexing, all files and subfolders are public by this tool. For example: `/Public`.
    */
-  base: '/Public',
+  base: '/',
 
   /**
    * Feature: Pagination when a folder has multiple(>${top}) files
@@ -60,10 +60,10 @@ const config = {
    */
   cache: {
     enable: true,
-    entireFileCacheLimit: 10000000, // 10MB
+    entireFileCacheLimit: 20000000, // 20MB
     chunkedCacheLimit: 100000000, // 100MB
-    previewCache: false,
-    paths: ['/🥟%20Some%20test%20files/Previews']
+    previewCache: true,
+    paths: ['/Videos']
   },
 
   /**
@@ -81,8 +81,8 @@ const config = {
    * The <secret_key> is defined by you
    */
   upload: {
-    enable: false,
-    key: 'your_secret_key_here'
+    enable: true,
+    key: 'SuperSecret'
   },
 
   /**
